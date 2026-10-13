@@ -1,1 +1,13 @@
-
+tasks.named('jar', Jar) {
+    archiveBaseName = 'amartaloe'
+    manifest {
+        attributes([
+            'Specification-Title'     : 'amartaloe',
+            'Specification-Vendor'    : 'amartaloe',
+            'Specification-Version'   : '1',
+            'Implementation-Title'    : project.name,
+            'Implementation-Version'  : project.version,
+            'Implementation-Vendor'   : 'amartaloe'
+        ])
+    }
+}
