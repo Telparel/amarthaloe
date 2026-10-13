@@ -21,33 +21,20 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.10.2'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew || true
+      - name: Build Mod Jar
+        run: gradle jar --no-daemon --stacktrace
 
-      - name: Inspect Repository Structure
+      - name: Find Built Files
         run: |
-          echo "=== Дерево файлов в репозитории ==="
-          ls -la
-          echo "=== Поиск build.gradle ==="
-          find . -name "build.gradle*"
-          echo "=== Поиск файлов исходного кода ==="
-          find . -name "*.java"
-
-      - name: List Available Gradle Tasks
-        run: ./gradlew tasks --all
-
-      - name: Build Jar Explicitly
-        run: ./gradlew jar --info --stacktrace
-
-      - name: Show Build Directory Contents
-        run: |
-          echo "=== Что сгенерировал Gradle в папке build ==="
-          find . -name "*.jar" || true
+          echo "=== Проверяем созданный jar ==="
+          ls -la build/libs/ || true
 
       - name: Upload Built Jar
         uses: actions/upload-artifact@v4
         with:
           name: amartaloe-1.21.1
-          path: "**/*.jar"
-          if-no-files-found: warn
+          path: build/libs/*.jar
+          if-no-files-found: error
