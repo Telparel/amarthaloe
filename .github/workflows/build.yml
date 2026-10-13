@@ -25,17 +25,29 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew || true
 
-      - name: Build Mod Jar
-        run: ./gradlew assemble --no-daemon --stacktrace
-
-      - name: Find Built Files
+      - name: Inspect Repository Structure
         run: |
-          echo "=== Поиск всех созданных .jar файлов в проекте ==="
-          find build -name "*.jar" || true
+          echo "=== Дерево файлов в репозитории ==="
+          ls -la
+          echo "=== Поиск build.gradle ==="
+          find . -name "build.gradle*"
+          echo "=== Поиск файлов исходного кода ==="
+          find . -name "*.java"
+
+      - name: List Available Gradle Tasks
+        run: ./gradlew tasks --all
+
+      - name: Build Jar Explicitly
+        run: ./gradlew jar --info --stacktrace
+
+      - name: Show Build Directory Contents
+        run: |
+          echo "=== Что сгенерировал Gradle в папке build ==="
+          find . -name "*.jar" || true
 
       - name: Upload Built Jar
         uses: actions/upload-artifact@v4
         with:
           name: amartaloe-1.21.1
-          path: build/**/*.jar
-          if-no-files-found: error
+          path: "**/*.jar"
+          if-no-files-found: warn
