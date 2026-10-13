@@ -1,5 +1,42 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.78'
+}
+
+version = '1.0.0'
+group = 'com.amartaloe.mod'
+
+base {
+    archivesName = 'amartaloe'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+neoForge {
+    version = '21.1.117'
+
+    runs {
+        client {
+            client()
+        }
+        server {
+            server()
+        }
+    }
+
+    mods {
+        amartaloe {
+            sourceSet project.sourceSets.main
+        }
+    }
+}
+
 tasks.named('jar', Jar) {
-    archiveBaseName = 'amartaloe'
+    archiveClassifier = ''
     manifest {
         attributes([
             'Specification-Title'     : 'amartaloe',
