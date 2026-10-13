@@ -26,11 +26,16 @@ jobs:
         run: chmod +x gradlew || true
 
       - name: Build Mod Jar
-        run: ./gradlew jar --no-daemon --stacktrace
+        run: ./gradlew assemble --no-daemon --stacktrace
+
+      - name: Find Built Files
+        run: |
+          echo "=== Поиск всех созданных .jar файлов в проекте ==="
+          find build -name "*.jar" || true
 
       - name: Upload Built Jar
         uses: actions/upload-artifact@v4
         with:
           name: amartaloe-1.21.1
-          path: build/libs/*.jar
+          path: build/**/*.jar
           if-no-files-found: error
