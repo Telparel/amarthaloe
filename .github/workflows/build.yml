@@ -3,9 +3,7 @@ name: Build Mod Jar
 on:
   push:
     branches: [ "main", "master" ]
-  pull_request:
-    branches: [ "main", "master" ]
-  workflow_dispatch: # Позволяет запускать сборку вручную кнопкой
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,14 +22,19 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v3
+        continue-on-error: true
+
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+        run: chmod +x gradlew || true
 
       - name: Build with Gradle
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build --stacktrace
 
       - name: Upload Built Jar
         uses: actions/upload-artifact@v4
         with:
           name: amartaloe-mod-jar
-          path: build/libs/*[!sources].jar
+          path: build/libs/*.jar
+          if-no-files-found: error
