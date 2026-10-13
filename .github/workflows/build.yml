@@ -25,14 +25,12 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew || true
 
-      - name: Build with Gradle
-        run: ./gradlew jar --stacktrace
-
-      - name: List output
-        run: ls -R build/libs || echo "No build/libs found"
+      - name: Build Mod Jar
+        run: ./gradlew jar --no-daemon --stacktrace
 
       - name: Upload Built Jar
         uses: actions/upload-artifact@v4
         with:
-          name: amartaloe-mod-jar
-          path: build/libs/
+          name: amartaloe-1.21.1
+          path: build/libs/*.jar
+          if-no-files-found: error
